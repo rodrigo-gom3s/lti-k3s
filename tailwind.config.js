@@ -4,6 +4,15 @@ export default {
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
   	extend: {
+		animation: {
+			fade: 'fadeIn .5s ease-in-out',
+		},
+		keyframes: {
+			fadeIn: {
+				from: { opacity: 0 },
+				to: { opacity: 1 },
+			},
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

@@ -1,5 +1,5 @@
 <script setup>
-import DataTable from '@/components/tables/DataTable.vue';
+import DataTable from '@/tables/DataTable.vue';
 const props = defineProps({
     data: {
         type: Array,

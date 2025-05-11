@@ -1,5 +1,5 @@
 <script setup>
-import { Binary, Calendar, ChevronDown, EthernetPort, Home, Inbox, Search, Settings, ShieldUser, Wifi, Workflow, LogOut, ArrowLeftRightIcon, ServerCrash, Repeat2 } from "lucide-vue-next"
+import { AppWindow, Box, Boxes, CaseUpper, HardDriveUpload, MonitorCog, Workflow } from "lucide-vue-next"
 import {
   Sidebar,
   SidebarContent,
@@ -25,29 +25,44 @@ import { RouterLink } from "vue-router";
 // Menu items.
 const items = [
   {
-    title: "High Availability",
-    url: "",
-    icon: Repeat2,
+    title: "Dashboard",
+    url: "dashboard",
+    icon: AppWindow,
   },
   {
-    title: "Live Migration",
-    url: "",
-    icon: ArrowLeftRightIcon,
+    title: "Namespaces",
+    url: "namespaces",
+    icon: CaseUpper,
   },
   {
-    title: "Fault Tolerance",
+    title: "Nodes",
     url: "",
-    icon: ServerCrash,
+    icon: Box,
   },
+  {
+    title: "Pods",
+    url: "",
+    icon: Boxes,
+  },
+  {
+    title: "Deployments",
+    url: "",
+    icon: HardDriveUpload,
+  },
+  {
+    title: "Services",
+    url: "",
+    icon: MonitorCog,
+  }
 ];
 
 </script>
 
 <template>
-  <Sidebar>
+  <Sidebar class="text-blue-600">
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel class="mb-4">Hypervisor HA & LM Manager</SidebarGroupLabel>
+        <SidebarGroupLabel class="mb-4">Kubernetes Manager</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
               <SidebarMenuItem v-for="item in items" :key="item.title" class="m-1">

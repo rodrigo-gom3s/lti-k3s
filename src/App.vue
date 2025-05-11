@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/toast/use-toast'
 
 const alertDialog = useTemplateRef('alert-dialog');
 provide('alertDialog', alertDialog);
+const { toast } = useToast()
 
 const openToast = (title_received, description_received, variant_recieved) => {
       toast({
@@ -28,7 +29,7 @@ provide('openToast', openToast);
 <template>
   <div class="h-screen overflow-hidden">
       <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
-      <div class="mx-auto md:ml-64">
+      <div class="mx-auto md:ml-64 bg-blue-500">
         <main>
             <RouterView />
           </main>
