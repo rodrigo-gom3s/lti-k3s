@@ -34,9 +34,10 @@ async function fetchNodesStatus() {
                 node_metrics.usage.memory = Number(node_metrics.usage.memory.replace(/[a-zA-Z]/g, ''))
                 node_metrics.usage.cpu = Number(node_metrics.usage.cpu.replace(/[a-zA-Z]/g, ''))
                 node.status.capacity.cpu = Number(node.status.capacity.cpu)
+                console.log(node_metrics)
                 data.value.push([{
                   name: node.metadata.name + " (Used)",
-                  node: node.metadata.name,
+                  node: node.metadata.name + " " + (node_metrics.metadata.labels['node-role.kubernetes.io/master'] == 'true' ? ' (Master)' : '(Worker)'),
                   memory_usage: Math.round(((node_metrics.usage.memory * resources_units_base2[size_memory_used]) / (node.status.capacity.memory * resources_units_base2[size_memory_capacity])) * 100),
                   processor_usage: Math.round((node_metrics.usage.cpu / (node.status.capacity.cpu * (10**9))) * 100)
                 },{
