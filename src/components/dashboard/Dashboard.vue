@@ -19,9 +19,9 @@ let resources_units_base2 = {
 }
 
 async function fetchNodesStatus() {
-   axios.get('/nodes')
+   axios.get('/v1/nodes')
     .then(response => {
-      axios.get('/nodes/metrics').then(response2 => {  
+      axios.get('/v1/nodes/metrics').then(response2 => {  
         let nodes_metrics = response2.data.items
         let nodes = response.data.items
 
