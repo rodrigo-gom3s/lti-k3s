@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Dashboard from '@/components/dashboard/Dashboard.vue'
 import Namespaces from '@/components/namespaces/Namespaces.vue'
+import Login from '@/components/login/Login.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,8 +22,29 @@ const router = createRouter({
       path: '/namespaces',
       name: 'namespaces',
       component: Namespaces,
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ],
+})
+
+let handlingFirstRoute = true
+
+router.beforeEach(async (to, from, next) => {
+  const storeAuth = useAuthStore()
+  if (handlingFirstRoute) {
+    handlingFirstRoute = false
+    await storeAuth.restoreLogin()
+  }
+
+  if(to.name != 'login' && !storeAuth.ip){
+    next({ name: 'login' })
+    return
+  }
+  next()
 })
 
 export default router

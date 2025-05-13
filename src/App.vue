@@ -9,6 +9,9 @@ import { SidebarProvider } from './components/ui/sidebar'
 import GlobalAlertDialog from '@/components/GlobalAlertDialog.vue';
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import { useToast } from '@/components/ui/toast/use-toast'
+import { useAuthStore } from '@/stores/auth'
+
+const storeAuth = useAuthStore()
 
 const alertDialog = useTemplateRef('alert-dialog');
 provide('alertDialog', alertDialog);
@@ -35,7 +38,7 @@ provide('openToast', openToast);
           </main>
       </div>
       <div>
-        <SidebarProvider>
+        <SidebarProvider v-if="storeAuth.ip">
           <AppSidebar />
         </SidebarProvider>
       </div>
