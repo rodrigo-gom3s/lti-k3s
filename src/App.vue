@@ -32,7 +32,7 @@ provide('openToast', openToast);
 <template>
   <div class="h-screen overflow-hidden">
       <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
-      <div class="mx-auto md:ml-64 bg-blue-500">
+      <div class="mx-auto bg-blue-500" :class="storeAuth.ip ? 'md:ml-64': ''">
         <main class="h-screen overflow-y-auto">
             <RouterView />
           </main>
