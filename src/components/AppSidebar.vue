@@ -35,11 +35,6 @@ const items = [
     icon: CaseUpper,
   },
   {
-    title: "Nodes",
-    url: "",
-    icon: Box,
-  },
-  {
     title: "Pods",
     url: "",
     icon: Boxes,

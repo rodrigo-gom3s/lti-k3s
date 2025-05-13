@@ -33,12 +33,12 @@ provide('openToast', openToast);
   <div class="h-screen overflow-hidden">
       <GlobalAlertDialog ref="alert-dialog"></GlobalAlertDialog>
       <div class="mx-auto md:ml-64 bg-blue-500">
-        <main>
+        <main class="h-screen overflow-y-auto">
             <RouterView />
           </main>
       </div>
       <div>
-        <SidebarProvider v-if="storeAuth.ip">
+        <SidebarProvider class="w-1/3" v-if="storeAuth.ip">
           <AppSidebar />
         </SidebarProvider>
       </div>

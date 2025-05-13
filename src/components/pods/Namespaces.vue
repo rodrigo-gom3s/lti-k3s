@@ -54,7 +54,7 @@ function getUptime(creationTimestamp) {
 
 function getNamespaces() {
   updateTable.value = true;
-  axios.get('/v1/namespaces')
+  axios.get('/namespaces')
     .then(response => {
       
       response.data.items.forEach((namespace) => {

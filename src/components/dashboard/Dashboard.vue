@@ -19,9 +19,9 @@ let resources_units_base2 = {
 }
 
 async function fetchNodesStatus() {
-   axios.get('/nodes')
+   axios.get('/v1/nodes')
     .then(response => {
-      axios.get('/nodes/metrics').then(response2 => {  
+      axios.get('/v1/nodes/metrics').then(response2 => {  
         let nodes_metrics = response2.data.items
         let nodes = response.data.items
 
@@ -75,10 +75,10 @@ onMounted(() => {
 <template>
   <div class="pl-12 pt-12 pr-10 w-full h-screen">
     <h1 class="text-4xl text-white mb-12">Dashboard</h1>
-    <div v-if="data.length === 0" class="w-full h-3/4 mx-auto items-center justify-center flex">
+    <div v-if="data.length === 0" class="w-full h-full mx-auto items-center justify-center flex">
       <Preloader class="w-1/6 h-1/6"/>
     </div>
-    <div v-if="data.length !== 0" class="bg-white h-3/4 rounded-lg overflow-auto shadow-2xl animate-fade w-full p-6">
+    <div v-if="data.length !== 0" class="bg-white rounded-lg shadow-2xl animate-fade w-full p-6">
       <h2 class="text-5xl font-light mx-10 my-5 text-black mb-6">Nodes</h2>
         <div class="xl:flex m-10 p-10 border-2 border-slate-500 rounded-xl" v-for="data_item in data">
             <div>
@@ -113,5 +113,6 @@ onMounted(() => {
           </div>
         </div>
     </div>
+    <div class="h-10"></div>
   </div>
 </template>
