@@ -32,7 +32,7 @@ function deleteNamespace() {
 </script>
 
 <template>
-            <div class="flex cursor-pointer" @click="deleteNamespace">
-              <component :is="CircleX" class="mr-2 h-5 bg-red-600" />
-            </div>
+  <div class="flex cursor-pointer" @click="deleteNamespace">
+    <CircleX color="red"/>
+  </div>
 </template>

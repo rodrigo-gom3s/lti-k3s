@@ -33,6 +33,6 @@ function deleteNamespace() {
 
 <template>
             <div class="flex cursor-pointer" @click="deleteNamespace">
-              <component :is="CircleX" class="mr-2 h-5" />
+              <component :is="CircleX" class="mr-2 h-5 text-red-500" />
             </div>
 </template>

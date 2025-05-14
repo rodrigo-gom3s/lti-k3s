@@ -1,5 +1,5 @@
 <script setup>
-import { AppWindow, Box, Boxes, CaseUpper, HardDriveUpload, MonitorCog, Workflow } from "lucide-vue-next"
+import { AppWindow, Box, Boxes, CaseUpper, HardDriveUpload, MonitorCog, Workflow, LogOut } from "lucide-vue-next"
 import {
   Sidebar,
   SidebarContent,
@@ -14,6 +14,7 @@ import {
   SidebarMenuSubButton
 } from "@/components/ui/sidebar"
 
+import { Button } from "@/components/ui/button"
 import {
   Collapsible,
   CollapsibleContent,
@@ -79,7 +80,7 @@ const items = [
         <div>
           <p class="text-sm text-gray-500">Cluster IP: <span class="font-semibold">{{ authStore.ip }}</span></p>
         </div>
-        <Button variant="outline" class="text-s px-2 py-1" @click="logout" alt-title="Logout">
+        <Button variant="outline" class="text-s px-2 py-1" @click="authStore.logout" alt-title="Logout">
           <LogOut class="w-4 h-4" />
         </Button>
       </div>
