@@ -14,13 +14,13 @@ const props = defineProps({
 })
 
 function deleteConfirmed() {
-  axios.delete('/namespaces/' + props.row_value.name)
+  axios.delete('v1/namespaces/' + props.row_value.name)
     .then(response => {
       openToast('Namespace deleted', 'The namespace has been successfully deleted.', 'success')
       getNamespaces()
     })
     .catch(error => {
-      openToast('Error deleting namespace', "Try again later", 'destructive')
+      openToast('Error deleting namespace', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive')
     });
 }
 function deleteNamespace() {
@@ -32,7 +32,8 @@ function deleteNamespace() {
 </script>
 
 <template>
-            <div class="flex cursor-pointer" @click="deleteNamespace">
-              <component :is="CircleX" class="mr-2 h-5 text-red-500" />
+            <div v-if="row_value.status === 'Active'"  @click="deleteNamespace">
+              <component :is="CircleX" class="mr-2 h-5" />
+              <p>Delete Namespace</p>
             </div>
 </template>

@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/vue-table'
 import Disabled from './Disabled.vue'
 import { h } from 'vue'
-import Delete from './Delete.vue'
+import DropdownTable from './DropdownTable.vue'
 
 interface Namespace{
     name: string
@@ -34,7 +34,7 @@ export const ColumnsNamespace: ColumnDef<Namespace>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             var row_value = row.original
-          return h('div', { class: 'relative' }, h(Delete, {
+          return h('div', { class: 'relative' }, h(DropdownTable, {
             row_value,
           }))
         },

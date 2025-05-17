@@ -39,7 +39,7 @@ const items = [
   },
   {
     title: "Pods",
-    url: "",
+    url: "pods",
     icon: Boxes,
   },
   {

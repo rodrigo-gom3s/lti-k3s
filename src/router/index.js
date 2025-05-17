@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Dashboard from '@/components/dashboard/Dashboard.vue'
 import Namespaces from '@/components/namespaces/Namespaces.vue'
+import Pods from '@/components/pods/Pods.vue'
 import Login from '@/components/login/Login.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -22,6 +23,11 @@ const router = createRouter({
       path: '/namespaces',
       name: 'namespaces',
       component: Namespaces,
+    },
+    {
+      path: '/pods',
+      name: 'pods',
+      component: Pods,
     },
     {
       path: '/login',

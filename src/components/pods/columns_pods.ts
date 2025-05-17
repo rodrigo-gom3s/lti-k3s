@@ -1,15 +1,15 @@
 import type { ColumnDef } from '@tanstack/vue-table'
 import Disabled from './Disabled.vue'
 import { h } from 'vue'
-import Delete from './Delete.vue'
+import DropdownTable from './DropdownTable.vue'
 
-interface Namespace{
+interface Pod{
     name: string
     status: string,
     'creation-time': string
 }
 
-export const ColumnsNamespace: ColumnDef<Namespace>[] = [
+export const ColumnsPod: ColumnDef<Pod>[] = [
     {
         accessorKey: 'name',
         header: 'Name',
@@ -29,12 +29,12 @@ export const ColumnsNamespace: ColumnDef<Namespace>[] = [
                 }))
             },
     },
-    {
+   {
         id: 'actions',
         enableHiding: false,
         cell: ({ row }) => {
             var row_value = row.original
-          return h('div', { class: 'relative' }, h(Delete, {
+          return h('div', { class: 'relative' }, h(DropdownTable, {
             row_value,
           }))
         },

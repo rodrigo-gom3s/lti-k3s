@@ -11,7 +11,7 @@ const error_message_name = ref('')
 
 const insertNamespace = async () => {
   try {
-    const response = await axios.post('/namespaces', 
+    const response = await axios.post('v1/namespaces', 
       {
           apiVersion: "v1",
           kind: "Namespace",
@@ -24,7 +24,7 @@ const insertNamespace = async () => {
       openToast('Namespace created', 'The namespace has been successfully created.', 'success')
     })
   } catch (error) {
-    openToast('Error creating namespace', "Try again later", 'destructive')
+    openToast('Error creating namespace', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive')
   }
 }
 

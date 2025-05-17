@@ -52,12 +52,12 @@ async function fetchNodesStatus() {
         });
 
       }).catch(() => {
-        openToast('Error', 'Failed to fetch nodes metrics', 'destructive');
+        openToast('Error', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
         return false
       });
     })
     .catch(() => {
-      openToast('Error', 'Failed to fetch nodes', 'destructive');
+      openToast('Error', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
       return false
     });
 }
@@ -75,7 +75,7 @@ onMounted(() => {
 <template>
   <div class="pl-12 pt-12 pr-10 w-full h-screen">
     <h1 class="text-4xl text-white mb-12">Dashboard</h1>
-    <div v-if="data.length === 0" class="w-full h-full mx-auto items-center justify-center flex">
+    <div v-if="data.length === 0" class="w-full h-3/4 mx-auto items-center justify-center flex">
       <Preloader class="w-1/6 h-1/6"/>
     </div>
     <div v-if="data.length !== 0" class="bg-white rounded-lg shadow-2xl animate-fade w-full p-6">

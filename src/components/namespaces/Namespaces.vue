@@ -56,7 +56,7 @@ function getNamespaces() {
   updateTable.value = true;
   axios.get('/v1/namespaces')
     .then(response => {
-      
+      namespaces.value = [];
       response.data.items.forEach((namespace) => {
         namespaces.value.push({
           name: namespace.metadata.name,

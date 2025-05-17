@@ -4,7 +4,7 @@ import {CircleX} from 'lucide-vue-next'
 import axios from 'axios'
 const openToast = inject('openToast')
 var alertDialog = inject('alertDialog')
-const getNamespaces = inject('getNamespaces')
+const getPods = inject('getPods')
 
 const props = defineProps({
   row_value: {
@@ -14,25 +14,26 @@ const props = defineProps({
 })
 
 function deleteConfirmed() {
-  axios.delete('/namespaces/' + props.row_value.name)
+  axios.delete('v1/namespaces/' + props.row_value.namespace + '/pods/' + props.row_value.name)
     .then(response => {
-      openToast('Namespace deleted', 'The namespace has been successfully deleted.', 'success')
-      getNamespaces()
+      openToast('Pod deleted', 'The pod has been successfully deleted.', 'success')
+      getPods()
     })
     .catch(error => {
-      openToast('Error deleting namespace', "Try again later", 'destructive')
+      openToast('Error deleting Pod', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive')
     });
 }
-function deleteNamespace() {
+function deletePod() {
   alertDialog.value.open(
     deleteConfirmed,
-    'Do you really want to delete this namespace ?', 'Cancel', 'Yes',
-    'Before deleting this namespace, be sure that you are not using it in any other configuration. This action cannot be undone.')
+    'Do you really want to delete this pod ?', 'Cancel', 'Yes',
+    'Before deleting this pod, be sure that you are not using . This action cannot be undone.')
 }
 </script>
 
 <template>
-  <div class="flex cursor-pointer" @click="deleteNamespace">
-    <CircleX color="red"/>
-  </div>
+            <div @click="deletePod">
+              <component :is="CircleX" class="mr-2 h-5" />
+              <p>Delete Pod</p>
+            </div>
 </template>
