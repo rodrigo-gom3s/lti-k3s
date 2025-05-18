@@ -44,7 +44,7 @@ const items = [
   },
   {
     title: "Deployments",
-    url: "",
+    url: "deployments",
     icon: HardDriveUpload,
   },
   {
@@ -78,7 +78,7 @@ const items = [
     <div class="mt-auto p-4 border-t">
       <div class="flex items-center justify-between space-x-4">
         <div>
-          <p class="text-sm text-gray-500">Cluster IP: <span class="font-semibold">{{ authStore.ip }}</span></p>
+          <p class="text-sm text-gray-500">Cluster IP: <span class="ms-1 font-semibold">{{ authStore.ip }}</span></p>
         </div>
         <Button variant="outline" class="text-s px-2 py-1" @click="authStore.logout" alt-title="Logout">
           <LogOut class="w-4 h-4" />

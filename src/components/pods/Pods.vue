@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject} from 'vue';
 import Table from '@/tables/Table.vue';
 import { ColumnsPod } from './columns_pods';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogScrollContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +19,7 @@ import { CirclePlus } from 'lucide-vue-next';
 let pods = ref([]);
 const isDialogOpen = ref(false)
 const updateTable = ref(false);
-
+const openToast = inject('openToast');
 const closeDialog = () => {
   isDialogOpen.value = false
 }
@@ -73,6 +74,7 @@ function getPods() {
       updateTable.value = false;
     })
     .catch(error => {
+      openToast("Error fetching pods", error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
       updateTable.value = false;
     });
 }
@@ -96,7 +98,7 @@ onMounted(() => {
                   <component :is="CirclePlus" class="mr-2 h-5" />
                 </div>
               </DialogTrigger>
-              <DialogContent>
+              <DialogScrollContent>
                 <DialogHeader>
                   <DialogTitle>Create Pod</DialogTitle>
                   <DialogDescription>
@@ -106,7 +108,7 @@ onMounted(() => {
                 <div>
                   <PodForm class="!overflow-auto" @closeDialog="closeDialog" />
                 </div>
-              </DialogContent>
+              </DialogScrollContent>
             </Dialog>
           </div>
         </div>

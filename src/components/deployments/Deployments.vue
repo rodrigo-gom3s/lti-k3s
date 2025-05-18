@@ -1,22 +1,23 @@
 <script setup>
-import { onMounted, ref, inject } from 'vue';
+import { onMounted, ref, inject} from 'vue';
 import Table from '@/tables/Table.vue';
-import { ColumnsNamespace } from './columns_namespace';
+import { ColumnsDeployment } from './columns_deployments';
 import axios from 'axios';
-import NamespaceForm from './NamespaceForm.vue';
+import DeploymentForm from './DeploymentForm.vue';
 import {provide} from 'vue'
 import Preloader from '../Preloader.vue';
+
 import {
   Dialog,
   DialogContent,
+  DialogScrollContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-
 import { CirclePlus } from 'lucide-vue-next';
-let namespaces = ref([]);
+let deployments = ref([]);
 const isDialogOpen = ref(false)
 const updateTable = ref(false);
 const openToast = inject('openToast');
@@ -53,38 +54,43 @@ function getUptime(creationTimestamp) {
 
 }
 
-function getNamespaces() {
+function getDeployments() {
   updateTable.value = true;
-  axios.get('/v1/namespaces')
+  deployments.value = []
+  axios.get('/v1/deployments')
     .then(response => {
-      namespaces.value = [];
-      response.data.items.forEach((namespace) => {
-        namespaces.value.push({
-          name: namespace.metadata.name,
-          status: namespace.status.phase,
-          creationTimestamp: getUptime(namespace.metadata.creationTimestamp),
+      response.data.items.forEach((deployment) => {  
+        deployments.value.push({
+          name: deployment.metadata.name,
+          replicas: deployment.spec.replicas + '/' + deployment.status.availableReplicas,
+          creationTimestamp: getUptime(deployment.metadata.creationTimestamp),
+          namespace: deployment.metadata.namespace,
+          app: deployment.spec.template.metadata.labels.app !== undefined ? deployment.spec.template.metadata.labels.app : deployment.spec.template.metadata.labels['k8s-app'],
+          containers: deployment.spec.template.spec.containers.map(container => ({
+            name: container.name,
+            image: container.image,
+            ports: container.ports,
+          })),
         });
-        
       });
-
       updateTable.value = false;
     })
     .catch(error => {
-      openToast("Error fetching namespaces", error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
+      openToast('Error fetching deployments', error.response.data.message, 'destructive');
       updateTable.value = false;
     });
 }
 
-provide('getNamespaces', getNamespaces);
+provide('getDeployments', getDeployments);
 
 onMounted(() => {
-  getNamespaces();
+  getDeployments();
 });
 </script>
 
 <template>
   <div class="px-20 py-20 h-screen">
-    <h1 class="text-4xl text-white mb-12">Namespaces</h1>
+    <h1 class="text-4xl text-white mb-12">Deployments</h1>
     <div class="pl-12 pt-12 pr-10 pb-10 rounded-lg shadow-2xl animate-fade w-full bg-white">
       <div class="flex space-x-3 border-none text-base">
           <div v-if="!updateTable" class="w-full h-10 flex justify-end animate-fade">
@@ -94,24 +100,24 @@ onMounted(() => {
                   <component :is="CirclePlus" class="mr-2 h-5" />
                 </div>
               </DialogTrigger>
-              <DialogContent>
+              <DialogScrollContent>
                 <DialogHeader>
-                  <DialogTitle>Create Namespace</DialogTitle>
+                  <DialogTitle>Create Deployment</DialogTitle>
                   <DialogDescription>
-                    Create a new namespace
+                    Create a new deployment
                   </DialogDescription>
                 </DialogHeader>
                 <div>
-                  <NamespaceForm @closeDialog="closeDialog" />
+                  <DeploymentForm @closeDialog="closeDialog"/>
                 </div>
-              </DialogContent>
+              </DialogScrollContent>
             </Dialog>
           </div>
         </div>
             <div v-if="updateTable" class="w-1/3 h-1/3 mx-auto items-center justify-center flex">
               <Preloader class="w-1/6 h-1/6"/>
             </div>
-        <Table class="animate-fade" v-if="!updateTable" :data="namespaces" :columns="ColumnsNamespace" />
+        <Table class="animate-fade mt-5" v-if="!updateTable" :data="deployments" :columns="ColumnsDeployment"/>
     </div>
   </div>
 </template>

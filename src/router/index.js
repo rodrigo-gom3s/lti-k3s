@@ -4,6 +4,7 @@ import Dashboard from '@/components/dashboard/Dashboard.vue'
 import Namespaces from '@/components/namespaces/Namespaces.vue'
 import Pods from '@/components/pods/Pods.vue'
 import Login from '@/components/login/Login.vue'
+import Deployments from '@/components/deployments/Deployments.vue'
 import { useAuthStore } from '@/stores/auth'
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/pods',
       name: 'pods',
       component: Pods,
+    },
+    {
+      path: '/deployments',
+      name: 'deployments',
+      component: Deployments,
     },
     {
       path: '/login',

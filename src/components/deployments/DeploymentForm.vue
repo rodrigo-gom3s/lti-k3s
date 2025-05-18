@@ -6,9 +6,11 @@ import { ColumnsContainer } from './columns_containers';
 import { CirclePlus } from 'lucide-vue-next';
 import { set } from 'zod';
 
-let pod = reactive({
+let deployment = reactive({
   name: '',
+  podName: '',
   namespace: '',
+  replicas: 1,
   containers: []
 })
 
@@ -24,12 +26,14 @@ let updateSelect = ref(false)
 let errors = reactive({
   name: '',
   namespace: '',
+  replicas: '',
+  podName: '',
 })
 let haveError = false
 let NAMESPACES = ref([])
 const emit = defineEmits(['closeDialog'])
 const openToast = inject('openToast')
-const getPods = inject('getPods')
+const getDeployments = inject('getDeployments')
 
 function updateTableStatus() {
       setTimeout(() => {
@@ -51,22 +55,37 @@ function getNamespaces() {
 }
 
 const insertPod = async () => {
-axios.post('v1/namespaces/' + pod.namespace + '/pods', 
+axios.post('v1/namespaces/' + deployment.namespace + '/deployments', 
       {
-          apiVersion: "v1",
-          kind: "Pod",
+          apiVersion: "apps/v1",
+          kind: "Deployment",
           metadata: {
-              name: pod.name
+              name: deployment.name
           },
           spec: {
-            containers: pod.containers
+            replicas: deployment.replicas,
+            selector: {
+              matchLabels: {
+                app: deployment.podName
+              }
+            },
+            template: {
+              metadata: {
+                labels: {
+                  app: deployment.podName
+                }
+              },
+              spec: {
+                containers: deployment.containers
+              }
+            }
           }
       }
     ).then(() => {
-      openToast('Pod created', 'The pod has been successfully created.', 'success')
-      getPods()
+      openToast('Deployment created', 'The deployment has been successfully created.', 'success')
+      getDeployments()
     }).catch(error =>{
-    openToast('Error creating namespace', error.response.data.message, 'destructive')
+    openToast('Error creating deployment', error.response.data.message, 'destructive')
   })
 }
 
@@ -79,7 +98,7 @@ function addContainer() {
 
   updateTable.value = true
 
-  pod.containers.push({
+  deployment.containers.push({
     name: container.name,
     image: container.image,
     ports: container.ports.split(',').map(port => ({ containerPort: parseInt(port.trim()) }))
@@ -95,15 +114,23 @@ const submitForm = () => {
   errors.namespace = ''
   errors.containers = ''
   haveError = false
-  if (pod.name === '') {
+  if (deployment.name === '') {
     errors.name = 'Name is required'
     haveError = true
   }
-  if (pod.namespace === '') {
+  if (deployment.podName === '') {
+    errors.podName = 'Pod Name is required'
+    haveError = true
+  }
+  if (deployment.replicas < 1) {
+    errors.replicas = 'The replicas amount must be at least 1'
+    haveError = true
+  }
+  if (deployment.namespace === '') {
     errors.namespace = 'Namespace is required'
     haveError = true
   }
-  if (pod.containers.length === 0) {
+  if (deployment.containers.length === 0) {
     errors.containers = 'At least one container is required'
     haveError = true
   }
@@ -125,15 +152,31 @@ const submitForm = () => {
 <div class="bg-white p-6 rounded-lg w-full">
     <form @submit.prevent="submitForm" class="space-y-4">
         <div class="mb-4">
-            <label class="block text-gray-700">Name</label>
-            <input type="text" name="name" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="pod.name" placeholder="Pod Name" />
+            <label class="block text-gray-700">Deployment Name</label>
+            <input type="text" name="name" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="deployment.name" placeholder="Deployment Name" />
             <div v-if="errors.name" >
                 <p class="text-sm text-red-700 mt-4">{{errors.name}} </p>
             </div>
         </div>
+        <div class="flex gap-2 mb-4">
+          <div class=" basis-5/6">
+              <label class="block text-gray-700">Pod Name</label>
+              <input type="text" name="name" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="deployment.podName" placeholder="Pod Name" />
+              <div v-if="errors.podName" >
+                  <p class="text-sm text-red-700 mt-4">{{errors.podName}} </p>
+              </div>
+          </div>
+          <div >
+              <label class="block text-gray-700">Replicas</label>
+              <input type="number" name="replicas" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="deployment.replicas" placeholder="Pod Amount of Replicas" />
+              <div v-if="errors.replicas" >
+                  <p class="text-sm text-red-700 mt-4">{{errors.replicas}} </p>
+              </div>
+          </div>
+        </div>
         <div class="mb-4">
             <label class="block text-gray-700">Namespace</label>
-            <select v-if="!updateSelect" v-model="pod.namespace" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600">
+            <select v-if="!updateSelect" v-model="deployment.namespace" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600">
                 <option value="" disabled selected>Select a namespace</option>
                 <option v-for="namespace in NAMESPACES" :value="namespace.name">{{ namespace.name }}</option>
             </select>
@@ -157,7 +200,7 @@ const submitForm = () => {
               </div>
             </div>
 
-            <Table class="mt-2" v-if="!updateTable" :data="pod.containers" :columns="ColumnsContainer"/>
+            <Table class="mt-2" v-if="!updateTable" :data="deployment.containers" :columns="ColumnsContainer"/>
         </div>
         <button type="submit" class="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-black">Confirm</button>
     </form>

@@ -8,17 +8,16 @@ const props = defineProps({
   }
 })
 
+console.log("Props: ", props.ports)
+
 const portList = ref("")
 
 function formatPorts(){
   props.ports.forEach((port, index) => {
-    if(isNaN(port.containerPort)){
-       portList.value = "----"
-      return
-    }
     if (props.ports.length == 1) {
       portList.value += port.containerPort
     } else {
+        console.log("Port: ", port)
         if (props.ports.length - 1 == index) {
           portList.value += port.containerPort
         } else {
@@ -32,6 +31,7 @@ onMounted(() => {
   formatPorts()
 })
 
+console.log("Ports: ", portList)
 </script>
 
 <template>
