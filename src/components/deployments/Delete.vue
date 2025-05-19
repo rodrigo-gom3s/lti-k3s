@@ -4,7 +4,7 @@ import {CircleX} from 'lucide-vue-next'
 import axios from 'axios'
 const openToast = inject('openToast')
 var alertDialog = inject('alertDialog')
-const getPods = inject('getPods')
+const getDeployments = inject('getDeployments')
 
 const props = defineProps({
   row_value: {
@@ -17,7 +17,7 @@ function deleteConfirmed() {
   axios.delete('v1/namespaces/' + props.row_value.namespace + '/deployments/' + props.row_value.name)
     .then(response => {
       openToast('Deployment deleted', 'The deployment has been successfully deleted.', 'success')
-      getPods()
+      getDeployments()
     })
     .catch(error => {
       openToast('Error deleting deployment', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive')

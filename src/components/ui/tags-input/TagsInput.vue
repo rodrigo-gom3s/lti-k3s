@@ -1,7 +1,7 @@
 <script setup>
-import { cn } from '@/lib/utils';
+import { reactiveOmit } from '@vueuse/core';
 import { TagsInputRoot, useForwardPropsEmits } from 'reka-ui';
-import { computed } from 'vue';
+import { cn } from '@/lib/utils';
 
 const props = defineProps({
   modelValue: { type: [Array, null], required: false },
@@ -30,11 +30,7 @@ const emits = defineEmits([
   'removeTag',
 ]);
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
-
-  return delegated;
-});
+const delegatedProps = reactiveOmit(props, 'class');
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 </script>

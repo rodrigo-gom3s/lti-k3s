@@ -1,7 +1,7 @@
 <script setup>
-import { cn } from '@/lib/utils';
+import { reactiveOmit } from '@vueuse/core';
 import { TagsInputInput, useForwardProps } from 'reka-ui';
-import { computed } from 'vue';
+import { cn } from '@/lib/utils';
 
 const props = defineProps({
   placeholder: { type: String, required: false },
@@ -12,11 +12,7 @@ const props = defineProps({
   class: { type: null, required: false },
 });
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
-
-  return delegated;
-});
+const delegatedProps = reactiveOmit(props, 'class');
 
 const forwardedProps = useForwardProps(delegatedProps);
 </script>

@@ -8,24 +8,21 @@ const props = defineProps({
   }
 })
 
+let isvalid = true
+
 const portList = ref("")
 
 function formatPorts(){
-  props.ports.forEach((port, index) => {
-    if(isNaN(port.containerPort)){
-       portList.value = "----"
+  props.ports.forEach((port) => {
+    if(isNaN(port)){
+      portList.value += '------'
+      isvalid = false
       return
     }
-    if (props.ports.length == 1) {
-      portList.value += port.containerPort
-    } else {
-        if (props.ports.length - 1 == index) {
-          portList.value += port.containerPort
-        } else {
-          portList.value += port.containerPort + ' | '
-        }
-    }
   })
+  if(isvalid){
+    portList.value = props.ports.join(' | ')
+  }
 }
 
 onMounted(() => {

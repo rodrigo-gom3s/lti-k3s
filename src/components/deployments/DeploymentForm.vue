@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted, inject, reactive, computed } from 'vue'
+import { ref, onMounted, inject, reactive, computed, provide } from 'vue'
 import axios from 'axios';
 import Table from '@/tables/Table.vue';
+import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
 import { ColumnsContainer } from './columns_containers';
-import { CirclePlus } from 'lucide-vue-next';
-import { set } from 'zod';
+import { CirclePlus } from 'lucide-vue-next';;
 
 let deployment = reactive({
   name: '',
@@ -14,10 +14,11 @@ let deployment = reactive({
   containers: []
 })
 
+
 let container = reactive({
   name: '',
   image: '',
-  ports: ''
+  ports: []
 })
 
 let updateTable = ref(false)
@@ -31,15 +32,24 @@ let errors = reactive({
 })
 let haveError = false
 let NAMESPACES = ref([])
+
+function updateTableStatus() {
+      updateTable.value = true
+      setTimeout(() => {
+      updateTable.value = false
+    }, 10)
+}
+
+function deleteContainer(index){
+  deployment.containers.splice(index, 1)
+  updateTableStatus()
+}
+
+provide('deleteContainer', deleteContainer)
 const emit = defineEmits(['closeDialog'])
 const openToast = inject('openToast')
 const getDeployments = inject('getDeployments')
 
-function updateTableStatus() {
-      setTimeout(() => {
-      updateTable.value = false
-    }, 1)
-}
 
 function getNamespaces() {
   updateSelect.value = true
@@ -75,9 +85,15 @@ axios.post('v1/namespaces/' + deployment.namespace + '/deployments',
                   app: deployment.podName
                 }
               },
-              spec: {
-                containers: deployment.containers
-              }
+            spec: {
+              containers: pod.containers.map(container => ({
+                name: container.name,
+                image: container.image,
+                ports: container.ports.map(port => ({
+                  containerPort: port
+                }))
+              }))
+            }
             }
           }
       }
@@ -91,7 +107,7 @@ axios.post('v1/namespaces/' + deployment.namespace + '/deployments',
 
 function addContainer() {
   errors.containers = ''
-  if (container.name === '' || container.image === '' || container.ports === '') {
+  if (container.name === '' || container.image === '' || container.ports.length === 0) {
     errors.containers = 'All fields are required'
     return
   }
@@ -101,11 +117,11 @@ function addContainer() {
   deployment.containers.push({
     name: container.name,
     image: container.image,
-    ports: container.ports.split(',').map(port => ({ containerPort: parseInt(port.trim()) }))
+    ports: container.ports
   })
   container.name = ''
   container.image = ''
-  container.ports = ''
+  container.ports = []
     updateTableStatus()
 }
 
@@ -150,7 +166,7 @@ const submitForm = () => {
 
 <template>
 <div class="bg-white p-6 rounded-lg w-full">
-    <form @submit.prevent="submitForm" class="space-y-4">
+    <form class="space-y-4">
         <div class="mb-4">
             <label class="block text-gray-700">Deployment Name</label>
             <input type="text" name="name" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="deployment.name" placeholder="Deployment Name" />
@@ -194,7 +210,13 @@ const submitForm = () => {
                 <input type="text" name="containerName" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="container.name" placeholder="Name" />
                 <input type="text" name="containerImage" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="container.image" placeholder="Image" />
               </div>
-                <input type="text" name="containerPort" class="w-full mt-2 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600" v-model="container.ports" placeholder="Port(s) (separated by commas)" />
+                  <TagsInput v-model="container.ports" class="mt-2">
+                  <TagsInputItem v-for="item in container.ports" :key="item" :value="item">
+                    <TagsInputItemText />
+                    <TagsInputItemDelete />
+                  </TagsInputItem>
+                    <TagsInputInput placeholder="Ports of the container" />
+                  </TagsInput>
               <div class="ps-2" v-if="errors.containers" >
                 <p class="text-sm text-red-700 mt-4">{{errors.containers}} </p>
               </div>
@@ -202,7 +224,7 @@ const submitForm = () => {
 
             <Table class="mt-2" v-if="!updateTable" :data="deployment.containers" :columns="ColumnsContainer"/>
         </div>
-        <button type="submit" class="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-black">Confirm</button>
+        <button type="button" @click="submitForm" class="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-black">Confirm</button>
     </form>
 </div>
 </template>
