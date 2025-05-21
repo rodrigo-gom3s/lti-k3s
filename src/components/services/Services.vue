@@ -1,25 +1,27 @@
 <script setup>
-import { onMounted, ref, inject} from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import Table from '@/tables/Table.vue';
-import { ColumnsPod } from './columns_pods';
+import { ColumnsService } from './columns_service';
 import axios from 'axios';
-import PodForm from './PodForm.vue';
+import ServiceForm from './ServiceForm.vue';
 import {provide} from 'vue'
 import Preloader from '../Preloader.vue';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogScrollContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+
 import { CirclePlus } from 'lucide-vue-next';
-let pods = ref([]);
+let services = ref([]);
 const isDialogOpen = ref(false)
 const updateTable = ref(false);
 const openToast = inject('openToast');
+let ingressSet = null
+
 const closeDialog = () => {
   isDialogOpen.value = false
 }
@@ -52,43 +54,53 @@ function getUptime(creationTimestamp) {
 
 }
 
-function getPods() {
+function getServices() {
   updateTable.value = true;
-  pods.value = []
-  axios.get('/v1/pods')
+  services.value = [];
+  axios.get('/v1/services')
     .then(response => {
-      response.data.items.forEach((pod) => {  
-        pods.value.push({
-          name: pod.metadata.name,
-          status: pod.status.phase,
-          creationTimestamp: getUptime(pod.metadata.creationTimestamp),
-          namespace: pod.metadata.namespace,
-          status: pod.status.phase,
-          containers: pod.spec.containers.map(container => ({
-            name: container.name,
-            image: container.image,
-            ports: container.ports,
-          })),
+      axios.get('/v1/ingress')
+        .then(response2 => {
+          response.data.items.forEach((service) => {
+            ingressSet = null
+            response2.data.items.forEach((ingress) => {
+              if (service.metadata.name === ingress.spec.rules[0].http.paths[0].backend.service.name) {
+                ingressSet = ingress.spec.rules[0].host;
+              }
+            });
+            services.value.push({
+            name: service.metadata.name,
+            namespace: service.metadata.namespace,
+            ip: service.spec.clusterIP,
+            externalPort: service.spec.ports[0].port,
+            internalPort: service.spec.ports[0].targetPort,
+            creationTimestamp: getUptime(service.metadata.creationTimestamp),
+            dnsEntry: ingressSet != null ? ingressSet : " --------- ",
+            });
         });
-      });
-      updateTable.value = false;
+        updateTable.value = false;
+        }).catch(error => {
+          throw error
+        });
     })
     .catch(error => {
-      openToast("Error fetching pods", error.response?.data?.message || error.message, 'destructive');
+      openToast("Error fetching services", error.response?.data?.message || error.message , 'destructive');
       updateTable.value = false;
     });
+
+    console.log(services.value)
 }
 
-provide('getPods', getPods);
+provide('getServices', getServices);
 
 onMounted(() => {
-  getPods();
+  getServices();
 });
 </script>
 
 <template>
   <div class="px-20 py-20 h-screen">
-    <h1 class="text-4xl text-white mb-12">Pods</h1>
+    <h1 class="text-4xl text-white mb-12">Services / Ingress</h1>
     <div class="pl-12 pt-12 pr-10 pb-10 rounded-lg shadow-2xl animate-fade w-full bg-white">
       <div class="flex space-x-3 border-none text-base">
           <div v-if="!updateTable" class="w-full h-10 flex justify-end animate-fade">
@@ -98,24 +110,24 @@ onMounted(() => {
                   <component :is="CirclePlus" class="mr-2 h-5" />
                 </div>
               </DialogTrigger>
-              <DialogScrollContent>
+              <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Create Pod</DialogTitle>
+                  <DialogTitle>Create Service</DialogTitle>
                   <DialogDescription>
-                    Create a new pod
+                    Create a new service
                   </DialogDescription>
                 </DialogHeader>
                 <div>
-                  <PodForm class="!overflow-auto" @closeDialog="closeDialog" />
+                  <ServiceForm @closeDialog="closeDialog" />
                 </div>
-              </DialogScrollContent>
+              </DialogContent>
             </Dialog>
           </div>
         </div>
             <div v-if="updateTable" class="w-1/3 h-1/3 mx-auto items-center justify-center flex">
               <Preloader class="w-1/6 h-1/6"/>
             </div>
-        <Table class="animate-fade mt-5" v-if="!updateTable" :data="pods" :columns="ColumnsPod"/>
+        <Table class="animate-fade mt-5" v-if="!updateTable" :data="services" :columns="ColumnsService" />
     </div>
   </div>
 </template>

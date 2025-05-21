@@ -24,7 +24,7 @@ const insertNamespace = async () => {
       openToast('Namespace created', 'The namespace has been successfully created.', 'success')
     })
   } catch (error) {
-    openToast('Error creating namespace', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive')
+    openToast('Error creating namespace', error.response?.data?.message || error.message , 'destructive')
   }
 }
 

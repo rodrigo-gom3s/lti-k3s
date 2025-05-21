@@ -62,7 +62,7 @@ function getDeployments() {
       response.data.items.forEach((deployment) => {  
         deployments.value.push({
           name: deployment.metadata.name,
-          replicas: deployment.spec.replicas + '/' + deployment.status.availableReplicas,
+          replicas: deployment.spec.replicas + '/' + (deployment.status.availableReplicas != undefined ? deployment.status.availableReplicas : '?'),
           creationTimestamp: getUptime(deployment.metadata.creationTimestamp),
           namespace: deployment.metadata.namespace,
           app: deployment.spec.template.metadata.labels.app !== undefined ? deployment.spec.template.metadata.labels.app : deployment.spec.template.metadata.labels['k8s-app'],
@@ -76,7 +76,7 @@ function getDeployments() {
       updateTable.value = false;
     })
     .catch(error => {
-      openToast('Error fetching deployments', error.response.data.message, 'destructive');
+      openToast('Error fetching deployments', error.response?.data?.message || error.message, 'destructive');
       updateTable.value = false;
     });
 }

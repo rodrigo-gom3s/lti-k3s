@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { CircleX, Cross, MoreHorizontal, Pencil, Info } from 'lucide-vue-next'
 import axios from 'axios'
 import { onMounted, ref, inject } from 'vue'
-import { ColumnsContainer } from './columns_containers'
+import { ColumnsContainer } from './columns_containers_show'
 import Table from '@/tables/Table.vue'
 import Delete from '@/components/deployments/Delete.vue'
 

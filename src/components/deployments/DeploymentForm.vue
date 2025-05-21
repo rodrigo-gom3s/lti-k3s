@@ -64,7 +64,7 @@ function getNamespaces() {
     })
 }
 
-const insertPod = async () => {
+const insertDeployment = async () => {
 axios.post('v1/namespaces/' + deployment.namespace + '/deployments', 
       {
           apiVersion: "apps/v1",
@@ -86,11 +86,11 @@ axios.post('v1/namespaces/' + deployment.namespace + '/deployments',
                 }
               },
             spec: {
-              containers: pod.containers.map(container => ({
+              containers: deployment.containers.map(container => ({
                 name: container.name,
                 image: container.image,
                 ports: container.ports.map(port => ({
-                  containerPort: port
+                  containerPort: Number(port)
                 }))
               }))
             }
@@ -101,7 +101,7 @@ axios.post('v1/namespaces/' + deployment.namespace + '/deployments',
       openToast('Deployment created', 'The deployment has been successfully created.', 'success')
       getDeployments()
     }).catch(error =>{
-    openToast('Error creating deployment', error.response.data.message, 'destructive')
+    openToast('Error creating deployment', error.response?.data?.message || error.message, 'destructive')
   })
 }
 
@@ -154,7 +154,7 @@ const submitForm = () => {
   if (haveError) {
     return
   }
-    insertPod()
+    insertDeployment()
     emit('closeDialog')
 }
 

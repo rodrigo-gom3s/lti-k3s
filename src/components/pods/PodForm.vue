@@ -5,6 +5,7 @@ import Table from '@/tables/Table.vue';
 import { ColumnsContainer } from './columns_containers';
 import { CirclePlus } from 'lucide-vue-next';
 import { TagsInput, TagsInputInput, TagsInputItem, TagsInputItemDelete, TagsInputItemText } from '@/components/ui/tags-input'
+import { labels } from '@unovis/ts/components/timeline/style';
 
 
 let pod = reactive({
@@ -59,8 +60,7 @@ function getNamespaces() {
 }
 
 const insertPod = async () => {
-axios.post('v1/namespaces/' + pod.namespace + '/pods', 
-      {
+  console.log({
           apiVersion: "v1",
           kind: "Pod",
           metadata: {
@@ -75,12 +75,32 @@ axios.post('v1/namespaces/' + pod.namespace + '/pods',
               }))
             }))
           }
+      })
+axios.post('v1/namespaces/' + pod.namespace + '/pods', 
+      {
+          apiVersion: "v1",
+          kind: "Pod",
+          metadata: {
+              name: pod.name
+          },
+          labels: {
+            app: pod.name
+          },
+          spec: {
+            containers: pod.containers.map(container => ({
+              name: container.name,
+              image: container.image,
+              ports: container.ports.map(port => ({
+                containerPort: Number(port)
+              }))
+            }))
+          }
       }
     ).then(() => {
       openToast('Pod created', 'The pod has been successfully created.', 'success')
       getPods()
     }).catch(error =>{
-    openToast('Error creating namespace', error.response.data.message, 'destructive')
+    openToast('Error creating namespace', error.response?.data?.message || error.message, 'destructive')
   })
 }
 

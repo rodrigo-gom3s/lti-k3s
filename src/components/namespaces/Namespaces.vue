@@ -70,7 +70,7 @@ function getNamespaces() {
       updateTable.value = false;
     })
     .catch(error => {
-      openToast("Error fetching namespaces", error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
+      openToast("Error fetching namespaces", error.response?.data?.message || error.message, 'destructive');
       updateTable.value = false;
     });
 }
@@ -111,7 +111,7 @@ onMounted(() => {
             <div v-if="updateTable" class="w-1/3 h-1/3 mx-auto items-center justify-center flex">
               <Preloader class="w-1/6 h-1/6"/>
             </div>
-        <Table class="animate-fade" v-if="!updateTable" :data="namespaces" :columns="ColumnsNamespace" />
+        <Table class="animate-fade mt-5" v-if="!updateTable" :data="namespaces" :columns="ColumnsNamespace" />
     </div>
   </div>
 </template>

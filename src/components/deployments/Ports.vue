@@ -14,7 +14,7 @@ const portList = ref("")
 
 function formatPorts(){
   props.ports.forEach((port) => {
-    if(isNaN(port)){
+    if(isNaN(Number(port))){
       portList.value += '------'
       isvalid = false
       return

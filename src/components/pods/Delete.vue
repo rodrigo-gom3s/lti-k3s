@@ -20,7 +20,7 @@ function deleteConfirmed() {
       getPods()
     })
     .catch(error => {
-      openToast('Error deleting pod', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive')
+      openToast('Error deleting pod', error.response?.data?.message || error.message, 'destructive')
     });
 }
 function deletePod() {

@@ -52,12 +52,12 @@ async function fetchNodesStatus() {
         });
 
       }).catch(() => {
-        openToast('Error fetching nodes status', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
+        openToast('Error fetching nodes status', error.response?.data?.message || error.message, 'destructive');
         return false
       });
     })
     .catch(() => {
-      openToast('Error fetching nodes', error.response.data.match(/<p>.*?<\/p>/g)[0].replace(/<p>/g, "").replace(/<\/p>/g, ""), 'destructive');
+      openToast('Error fetching nodes', error.response?.data?.message || error.message, 'destructive');
       return false
     });
 }

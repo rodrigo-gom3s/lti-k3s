@@ -48,9 +48,9 @@ const items = [
     icon: HardDriveUpload,
   },
   {
-    title: "Services",
-    url: "",
-    icon: MonitorCog,
+    title: "Services / Ingress",
+    url: "services",
+    icon: Workflow,
   }
 ];
 
