@@ -58,6 +58,7 @@ const insertService = async () => {
       kind: 'Service',
       metadata: {
         name: service.name,
+        namespace: service.namespace,
       },
       spec:{
         ports:[{
@@ -75,6 +76,7 @@ const insertService = async () => {
             kind: 'Ingress',
             metadata: {
               name: service.name,
+              namespace: service.namespace,
               annotations: {
                 "traefik.ingress.kubernetes.io/router.entrypoints": "web"
               },

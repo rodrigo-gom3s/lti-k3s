@@ -51,12 +51,12 @@ async function fetchNodesStatus() {
           
         });
 
-      }).catch(() => {
+      }).catch((error) => {
         openToast('Error fetching nodes status', error.response?.data?.message || error.message, 'destructive');
         return false
       });
     })
-    .catch(() => {
+    .catch((error) => {
       openToast('Error fetching nodes', error.response?.data?.message || error.message, 'destructive');
       return false
     });

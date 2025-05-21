@@ -59,10 +59,11 @@ function getDeployments() {
   deployments.value = []
   axios.get('/v1/deployments')
     .then(response => {
-      response.data.items.forEach((deployment) => {  
+      response.data.items.forEach((deployment) => { 
+      console.log(deployment.status) 
         deployments.value.push({
           name: deployment.metadata.name,
-          replicas: deployment.spec.replicas + '/' + (deployment.status.availableReplicas != undefined ? deployment.status.availableReplicas : '?'),
+          replicas: (deployment.status.availableReplicas != undefined ? deployment.status.availableReplicas : '0') + '/' +deployment.spec.replicas,
           creationTimestamp: getUptime(deployment.metadata.creationTimestamp),
           namespace: deployment.metadata.namespace,
           app: deployment.spec.template.metadata.labels.app !== undefined ? deployment.spec.template.metadata.labels.app : deployment.spec.template.metadata.labels['k8s-app'],
