@@ -60,7 +60,6 @@ function getDeployments() {
   axios.get('/v1/deployments')
     .then(response => {
       response.data.items.forEach((deployment) => { 
-      console.log(deployment.status) 
         deployments.value.push({
           name: deployment.metadata.name,
           replicas: (deployment.status.availableReplicas != undefined ? deployment.status.availableReplicas : '0') + '/' +deployment.spec.replicas,

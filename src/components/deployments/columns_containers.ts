@@ -36,7 +36,7 @@ export const ColumnsContainer: ColumnDef<Container>[] = [
             enableHiding: false,
             cell: ({ row }) => {
                 var row_value = row
-              return h('div', { class: 'relative transition hover:text-red-500 cursor-pointer' }, h(DeleteContainer, {
+              return h('div', { class: 'transition text-red-500 hover:text-red-700 cursor-pointer flex justify-end' }, h(DeleteContainer, {
                 row_value,
               }))
             },

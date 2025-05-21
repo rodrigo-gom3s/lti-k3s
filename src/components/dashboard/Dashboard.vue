@@ -34,7 +34,6 @@ async function fetchNodesStatus() {
                 node_metrics.usage.memory = Number(node_metrics.usage.memory.replace(/[a-zA-Z]/g, ''))
                 node_metrics.usage.cpu = Number(node_metrics.usage.cpu.replace(/[a-zA-Z]/g, ''))
                 node.status.capacity.cpu = Number(node.status.capacity.cpu)
-                console.log(node_metrics)
                 data.value.push([{
                   name: node.metadata.name + " (Used)",
                   node: node.metadata.name + " " + (node_metrics.metadata.labels['node-role.kubernetes.io/master'] == 'true' ? ' (Master)' : '(Worker)'),

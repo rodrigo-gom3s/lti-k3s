@@ -22,10 +22,6 @@ export const ColumnsService: ColumnDef<Service>[] = [
         header: 'Namespace',
     },
     {
-        accessorKey: 'ip',
-        header: 'Cluster IP',
-    },
-    {
         accessorKey: 'externalPort',
         header: 'External Port',
     },
@@ -42,7 +38,7 @@ export const ColumnsService: ColumnDef<Service>[] = [
         enableHiding: false,
         cell: ({ row }) => {
             var row_value = row.original
-          return h('div', { class: 'relative flex transition hover:text-red-500 cursor-pointer' }, h(Delete, {
+          return h('div', { class: 'relative flex transition text-red-500 hover:text-red-700 cursor-pointer' }, h(Delete, {
             row_value,
           }))
         },

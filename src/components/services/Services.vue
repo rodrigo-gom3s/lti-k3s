@@ -87,8 +87,6 @@ function getServices() {
       openToast("Error fetching services", error.response?.data?.message || error.message , 'destructive');
       updateTable.value = false;
     });
-
-    console.log(services.value)
 }
 
 provide('getServices', getServices);

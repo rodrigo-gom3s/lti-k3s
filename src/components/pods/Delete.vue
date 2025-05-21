@@ -15,7 +15,7 @@ const props = defineProps({
 
 function deleteConfirmed() {
   axios.delete('v1/namespaces/' + props.row_value.namespace + '/pods/' + props.row_value.name)
-    .then(response => {
+    .then(() => {
       openToast('Pod deleted', 'The pod has been successfully deleted.', 'success')
       getPods()
     })

@@ -60,22 +60,6 @@ function getNamespaces() {
 }
 
 const insertPod = async () => {
-  console.log({
-          apiVersion: "v1",
-          kind: "Pod",
-          metadata: {
-              name: pod.name
-          },
-          spec: {
-            containers: pod.containers.map(container => ({
-              name: container.name,
-              image: container.image,
-              ports: container.ports.map(port => ({
-                containerPort: port
-              }))
-            }))
-          }
-      })
 axios.post('v1/namespaces/' + pod.namespace + '/pods', 
       {
           apiVersion: "v1",
