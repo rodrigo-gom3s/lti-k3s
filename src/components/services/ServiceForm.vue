@@ -109,7 +109,8 @@ const insertService = async () => {
         })
       }else {
         openToast('Service created','Service has been created successfully', 'success')
-        getServices
+        getServices()
+
       }
     }).catch((error) =>{
       openToast('Error creating service', error.response?.data?.message || error.message, 'destructive')
