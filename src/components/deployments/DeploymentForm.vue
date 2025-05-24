@@ -215,7 +215,7 @@ const submitForm = () => {
                     <TagsInputItemText />
                     <TagsInputItemDelete />
                   </TagsInputItem>
-                    <TagsInputInput placeholder="Ports of the container" />
+                    <TagsInputInput placeholder="Ports of the container (press enter to insert each one)" />
                   </TagsInput>
               <div class="ps-2" v-if="errors.containers" >
                 <p class="text-sm text-red-700 mt-4">{{errors.containers}} </p>
