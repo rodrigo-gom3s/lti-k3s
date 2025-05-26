@@ -224,7 +224,7 @@ const submitForm = () => {
 
             <Table class="mt-2" v-if="!updateTable" :data="deployment.containers" :columns="ColumnsContainer"/>
         </div>
-        <button type="button" @click="submitForm" class="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-black">Confirm</button>
+        <button type="button" @click="submitForm" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700">Confirm</button>
     </form>
 </div>
 </template>

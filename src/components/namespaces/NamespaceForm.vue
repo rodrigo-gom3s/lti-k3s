@@ -51,7 +51,7 @@ const submitForm = () => {
                 <p class="text-sm text-red-700 mt-4">{{error_message_name}} </p>
             </div>
         </div>
-        <button type="submit" class="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-black">Confirm</button>
+        <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700">Confirm</button>
     </form>
 </div>
 </template>

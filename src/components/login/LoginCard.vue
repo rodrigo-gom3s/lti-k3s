@@ -12,7 +12,6 @@ const handleClick = () => {
   emit('select', props.login)
 }
 
-console.log('LoginCard props:', props.login)
 
 </script>
 

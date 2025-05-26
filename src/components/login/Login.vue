@@ -71,7 +71,7 @@ onMounted(() => {
         <Button variant="outline" @click="cancel">
           Cancel
         </Button>
-        <Button @click="login">
+        <Button class="bg-blue-500" @click="login">
           Login
         </Button>
       </CardFooter>
