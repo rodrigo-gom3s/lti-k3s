@@ -1,92 +1,61 @@
+# LTI-K3S
 
-<<<<<<< HEAD
-> ⚠️ **Warning**: This project is an **academic project** and is intended for educational purposes only. It may not cover all edge cases or advanced Mikrotik configurations.
-
-This project is an **academic project** developed to manage Mikrotik routers using a Vue.js-based interface. It provides an intuitive and user-friendly way to interact with Mikrotik devices, allowing users to configure interfaces, manage peers, and monitor network settings.
-
-## Main Functionalities
-
-- **Manage Multiple Devices**: Control more than one Mikrotik device using the same application.
-- **Interface Management**:
-  - List all interfaces of the device.
-  - List only wireless interfaces.
-- **Bridge Management**:
-  - List, create, edit, and delete bridge interfaces and their associated ports.
-- **Wireless Security Profiles**:
-  - Create, edit, and delete security profiles for use in wireless networks.
-- **Wireless Network Management**:
-  - Enable, disable, and configure wireless networks.
-- **Static Routes**:
-  - List, create, edit, and delete static routes.
-- **IP Address Management**:
-  - List, create, edit, and delete IP addresses.
-- **DHCP Servers**:
-  - List, create, edit, and delete DHCP servers.
-- **DNS Server Management**:
-  - Enable, disable, and configure the DNS server.
-
-## Prerequisites
-
-This project requires a Python backend to function properly. Make sure to set up and run the backend before using this application. The backend handles communication with Mikrotik devices and provides the necessary APIs for the Vue.js frontend.
-
-### Backend Setup
-
-1. Clone the Python backend repository:
-   ```sh
-   git clone https://github.com/iuricarras/lti-mikrotik-python.git
-   cd lti-mikrotik-python
-   ```
-
-2. Follow the instructions in the backend's `README.md` file to set it up and start the server.
-
-3. Ensure the backend is running and accessible before starting the Vue.js frontend.
+**⚠️ Warning:** This code is an academic project and is not intended for production use.
 
 
-## Project Setup (Frontend)
+LTI-K3S is a web interface for managing and controlling a Kubernetes Cluster. It provides an intuitive UI to interact with namespaces, pods, deployments, and services, making Kubernetes cluster management easier and more accessible. 
 
-Follow these steps to set up the Vue.js frontend:
+**Note:** This frontend is designed to be used together with the [lti-k3s-python backend](https://github.com/iuricarras/lti-k3s-python) project.
+
+
+## Features
+
+- **Dashboard**: Overview of cluster resources and status.
+- **Namespaces**: Create, list, and delete namespaces.
+- **Pods**: Create, view, and delete pods with container configuration.
+- **Deployments**: Manage deployments, including scaling and container setup.
+- **Services**: View and manage Kubernetes services.
+- **Authentication**: Secure access with authentication support.
+- **Responsive UI**: Built with Vue 3, Tailwind CSS, and Vite for a modern, fast experience.
+
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
-- npm (v7 or higher)
+- [Node.js](https://nodejs.org/) (v16+ recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
 ### Installation
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/iuricarras/lti-mikrotik.git
-   cd lti-mikrotik
+   git clone https://github.com/rodrigo-gom3s/lti-k3s
+   cd lti-k3s
    ```
 
 2. Install dependencies:
    ```sh
    npm install
+   # or
+   yarn install
    ```
 
-### Running the Project
+3. Start the development server:
+   ```sh
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-#### Compile and Hot-Reload for Development
-To start the development server with hot-reloading:
-```sh
-npm run dev
-```
+4. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-#### Compile and Minify for Production
-To build the project for production:
-```sh
-npm run build
-```
+## Technologies Used
 
-### Deployment
-After building the project, the production-ready files will be available in the `dist` folder. You can deploy these files to any static hosting service.
-
-## Notes
-
-This project is intended for academic purposes and may not cover all edge cases or advanced Mikrotik configurations. Use it as a learning tool or as a starting point for more complex projects.
-
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for more details.
-=======
->>>>>>> b3a63b28598fdd1b967a9ebea4451fe97295e4f8
+- [Vue 3](https://vuejs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Axios](https://axios-http.com/)
+- [Pinia](https://pinia.vuejs.org/) (state management)
+- [Vue Router](https://router.vuejs.org/)
+- [Shadcn/vue](https://www.shadcn-vue.com/)
