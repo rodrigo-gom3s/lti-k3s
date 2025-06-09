@@ -49,7 +49,7 @@ defineExpose({
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>{{ cancelText }}</AlertDialogCancel>
-        <AlertDialogAction class="bg-blue-500" @click="handleAction">{{ actionText }}</AlertDialogAction>
+        <AlertDialogAction class="bg-blue-500 hover:bg-blue-700" @click="handleAction">{{ actionText }}</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
