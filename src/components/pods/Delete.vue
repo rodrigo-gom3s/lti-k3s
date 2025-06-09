@@ -27,7 +27,7 @@ function deletePod() {
   alertDialog.value.open(
     deleteConfirmed,
     'Do you really want to delete this pod ?', 'Cancel', 'Yes',
-    'Before deleting this pod, be sure that you are not using . This action cannot be undone.')
+    'Before deleting this pod, be sure that you are not using. This action cannot be undone.')
 }
 </script>
 
