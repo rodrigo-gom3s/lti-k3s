@@ -90,7 +90,7 @@ axios.post('v1/namespaces/' + pod.namespace + '/pods',
 
 function addContainer() {
   errors.containers = ''
-  if (container.name === '' || container.image === '' || container.ports === '') {
+  if (container.name === '' || container.image === '' || container.ports.length === 0) {
     errors.containers = 'All fields are required'
     return
   }
